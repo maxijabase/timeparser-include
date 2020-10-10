@@ -43,7 +43,7 @@ stock int ParseTime(const char[] time) {
 	char buf0[8];
 	Format(buf0, sizeof(buf0), "%c", time[0]);
 	
-	if (!numRegex.Match(buf0)) {
+	if (numRegex.Match(buf0) == 0) {
 	
 		return -1;
 	
