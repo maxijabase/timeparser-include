@@ -9,7 +9,7 @@ Written by ampere - October 5, 2020
 #endif
 #define _timeparser_included
 
-#define TIMEPARSER_VERSION 1.0
+#define TIMEPARSER_VERSION 1.1
 
 #define MAX_INTEGER_VALUE 2147483647
 #define YEAR_TO_SECONDS 31536000
@@ -30,7 +30,7 @@ Written by ampere - October 5, 2020
  *
  * If time input causes an integer overflow, the max amount of time will be returned.
  * If there's an invalid time unit input, it will not add up to the final return value.
- * If no valid time unit inputs were found, -1 will be returned as error
+ * If no valid time unit inputs were found (or an invalid input was found), -1 will be returned as error
  * 
  * @param time    Time input.
  * @return        UNIX timestamp or -1 on error
@@ -39,6 +39,15 @@ stock int ParseTime(const char[] time) {
 	
 	Regex numRegex = new Regex("^[0-9]+$");
 	int totalTime;
+	
+	char buf0[8];
+	Format(buf0, sizeof(buf0), "%c", time[0]);
+	
+	if (!numRegex.Match(buf0)) {
+	
+		return -1;
+	
+	}
 	
 	for (int i = 0; i < strlen(time); i++) {
 		
