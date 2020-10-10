@@ -38,13 +38,14 @@ Written by ampere - October 5, 2020
 stock int ParseTime(const char[] time) {
 	
 	Regex numRegex = new Regex("^[0-9]+$");
-	int totalTime;
+	int totalTime, bufTime;
 	
 	char buf0[8];
 	Format(buf0, sizeof(buf0), "%c", time[0]);
 	
 	if (numRegex.Match(buf0) == 0) {
 	
+		delete numRegex;
 		return -1;
 	
 	}
@@ -80,14 +81,16 @@ stock int ParseTime(const char[] time) {
 					
 				}
 				
+				bufTime = StringToInt(buf4);
+				
 				switch (time[i]) {
 					
-					case 'y':totalTime += StringToInt(buf4) * YEAR_TO_SECONDS;
-					case 'w':totalTime += StringToInt(buf4) * WEEK_TO_SECONDS;
-					case 'd':totalTime += StringToInt(buf4) * DAY_TO_SECONDS;
-					case 'h':totalTime += StringToInt(buf4) * HOUR_TO_SECONDS;
-					case 'm':totalTime += StringToInt(buf4) * MINUTE_TO_SECONDS;
-					case 's':totalTime += StringToInt(buf4);
+					case 'y':totalTime += bufTime * YEAR_TO_SECONDS;
+					case 'w':totalTime += bufTime * WEEK_TO_SECONDS;
+					case 'd':totalTime += bufTime * DAY_TO_SECONDS;
+					case 'h':totalTime += bufTime * HOUR_TO_SECONDS;
+					case 'm':totalTime += bufTime * MINUTE_TO_SECONDS;
+					case 's':totalTime += bufTime;
 					
 				}
 				
