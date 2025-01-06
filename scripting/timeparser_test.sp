@@ -1,5 +1,5 @@
 #include <sourcemod>
-#include "timeparser"
+#include "include/timeparser"
 
 #pragma semicolon 1
 #pragma newdecls required

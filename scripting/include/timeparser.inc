@@ -3,10 +3,10 @@
  * Original by ampere (2020)
  */
 
-#if defined _timeparser_v2_included
+#if defined _timeparser_included
 #endinput
 #endif
-#define _timeparser_v2_included
+#define _timeparser_included
 
 #define TIMEPARSER_VERSION 2.0
 
@@ -59,7 +59,7 @@ enum TimeParseResult {
  * @param currentTime   Optional base time (default: GetTime())
  * @return             Unix timestamp or error code from TimeParseError
  */
-stock int ParseTime2(const char[] time, int currentTime = 0) {
+stock int ParseTime(const char[] time, int currentTime = 0) {
     if (time[0] == '\0') {
         return TIME_PARSE_INVALID_INPUT;
     }
