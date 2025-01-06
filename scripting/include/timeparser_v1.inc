@@ -4,10 +4,10 @@ Written by ampere - October 5, 2020
 
 */
 
-#if defined _timeparser_included
+#if defined _timeparser_v1_included
 #endinput
 #endif
-#define _timeparser_included
+#define _timeparser_v1_included
 
 #define TIMEPARSER_VERSION 1.1
 
@@ -36,7 +36,7 @@ Written by ampere - October 5, 2020
  * @return        UNIX timestamp or -1 on error
  */
 
-stock int ParseTime(const char[] time) {
+stock int ParseTime1(const char[] time) {
 	Regex numRegex = new Regex("^[0-9]+$");
 	int totalTime, bufTime;
 	char buf0[8];
