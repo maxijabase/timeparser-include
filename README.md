@@ -1,39 +1,84 @@
-# timeparser-include
-A SourcePawn include to parse readable time inputs to UNIX timestamps
+# SourceMod Time Parser
 
-It's designed to parse time inputs in the following syntax:
-[amount][unit]<br>
-Following the usable test plugin command example that comes in the repo: <br>
-*sm_timeparse 3d12h* | *2y* | *5m* | *120d*<br>
-<br>
-This function turns into seconds all valid time inputs and sums it up with the current UNIX timestamp, returning the future date (as a timestamp).<br>
-<br>
-### Supported time units
-* Years (y)
-* Weeks (w)
-* Days (d)
-* Hours (h)
-* Minutes (m)
-* Seconds (s)
-<br>
+A lightweight utility that converts human-readable time strings into UNIX timestamps in SourceMod.
 
-### Example tests
+## Usage
 
+### Include in your plugin
+
+```sourcepawn
+#include <timeparser>
 ```
-sm_timeparse 3d12h
-The parser returned timestamp 1602663143
-CURRENT TIME: 2020-10-10 17:12:23
-PARSED TIME: 2020-10-14 05:12:23
+
+### Basic Examples
+
+```sourcepawn
+// Simple time string parsing
+int timestamp = ParseTime("1y");         // 1 year from now
+int timestamp = ParseTime("2w3d");       // 2 weeks and 3 days from now
+int timestamp = ParseTime("24h30m");     // 24 hours and 30 minutes from now
+int timestamp = ParseTime("1y6m10d");    // 1 year, 6 months, and 10 days from now
+
+// Error handling
+int result = ParseTime("invalid");
+if (result == -1) {
+    PrintToServer("Invalid time format");
+}
 ```
+
+### Supported Units
+
+- `y` - Years
+- `w` - Weeks
+- `d` - Days
+- `h` - Hours
+- `m` - Minutes
+- `s` - Seconds
+
+### Error Codes
+
+- `-1` - Invalid input or no valid time units found
+- Other positive integers - Valid UNIX timestamp
+
+### Example Plugin
+
+```sourcepawn
+#include <sourcemod>
+#include "timeparser"
+
+public Plugin myinfo = {
+    name = "Time Parser Example",
+    author = "Your Name",
+    description = "Example usage of Time Parser",
+    version = "1.0",
+    url = ""
+};
+
+public void OnPluginStart() {
+    RegConsoleCmd("sm_bantime", Command_BanTime);
+}
+
+public Action Command_BanTime(int client, int args) {
+    if (!args) {
+        ReplyToCommand(client, "Usage: sm_bantime <time>");
+        ReplyToCommand(client, "Example: sm_bantime 1w2d");
+        return Plugin_Handled;
+    }
+    
+    char argTime[32];
+    GetCmdArg(1, argTime, sizeof(argTime));
+    
+    int banTime = ParseTime(argTime);
+    if (banTime == -1) {
+        ReplyToCommand(client, "Invalid time format!");
+        return Plugin_Handled;
+    }
+    
+    ReplyToCommand(client, "Ban would expire at: %d", banTime);
+    return Plugin_Handled;
+}
 ```
-sm_timeparse 12w60d
-The parser returned timestamp 1614803647
-CURRENT TIME: 2020-10-10 17:34:07
-PARSED TIME: 2021-03-03 17:34:07
-```
-```
-sm_timeparse 1m30s
-The parser returned timestamp 1602362192
-CURRENT TIME: 2020-10-10 17:35:02
-PARSED TIME: 2020-10-10 17:36:32
-```
+
+## License
+
+MIT License - Feel free to use and modify as needed.
